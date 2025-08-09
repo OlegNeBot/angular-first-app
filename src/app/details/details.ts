@@ -1,11 +1,12 @@
 import {Component, inject} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
+import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {HousingService} from "../housing.service";
 import {HousingLocationInfo} from "../housing-location";
 
 @Component({
     selector: "app-details",
-    imports: [],
+    imports: [ReactiveFormsModule],
     template: `
         <article>
             <img
@@ -26,6 +27,21 @@ import {HousingLocationInfo} from "../housing-location";
                     <li>Does this location have laundry: {{ housingLocation?.laundry }}</li>
                 </ul>
             </section>
+            <section class="listing-apply">
+                <h2 class="section-heading">Apply now to live here</h2>
+                <form [formGroup]="applyForm" (submit)="submitApplication()">
+                    <label for="first-name">First Name</label>
+                    <input id="first-name" type="text" formControlName="firstName" />
+
+                    <label for="last-name">Last Name</label>
+                    <input id="last-name" type="text" formControlName="lastName" />
+
+                    <label for="email">Email</label>
+                    <input id="email" type="email" formControlName="email" />
+
+                    <button type="submit" class="primary">Apply Now</button>
+                </form>
+            </section>
         </article>
     `,
     styleUrls: ["./details.css"],
@@ -35,9 +51,23 @@ export class Details {
     housingService: HousingService = inject(HousingService);
     housingLocation: HousingLocationInfo | undefined;
 
+    applyForm = new FormGroup({
+        firstName: new FormControl(""),
+        lastName: new FormControl(""),
+        email: new FormControl(""),
+    });
+
     constructor() {
         const housingLocationId = Number(this.route.snapshot.params["id"]);
 
         this.housingLocation = this.housingService.getHousingLocationById(housingLocationId);
+    }
+
+    submitApplication() {
+        this.housingService.submitApplication(
+            this.applyForm.value.firstName ?? "",
+            this.applyForm.value.lastName ?? "",
+            this.applyForm.value.email ?? ""
+        );
     }
 }
