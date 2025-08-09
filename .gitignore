@@ -1,2 +1,9 @@
 # Node modules folder.
-node_modules/
+/node_modules
+
+# Build folders.
+/dist
+/build
+
+# Angular cache.
+/.angular/cache
