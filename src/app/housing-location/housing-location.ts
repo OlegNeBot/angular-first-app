@@ -1,10 +1,10 @@
 import {Component, input} from "@angular/core";
-import {RouterLink, RouterOutlet} from "@angular/router";
+import {RouterLink} from "@angular/router";
 import {HousingLocationInfo} from "../housing-location";
 
 @Component({
     selector: "app-housing-location",
-    imports: [RouterLink, RouterOutlet],
+    imports: [RouterLink],
     template: `
         <section class="listing">
             <img
